@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using PolishNewsHarvester.Common.Dto;
+using PolishNewsHarvesterSdk.Dto;
 
-namespace PolishNewsHarvester.NewsSites
+namespace PolishNewsHarvesterWorker.NewsSites
 {
     interface INewsSite
     {

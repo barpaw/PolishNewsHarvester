@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-CU5-ubuntu-18.04
+    ports:
+      - 1433:1433
+    container_name: polishnewsharvester_mssql
+    environment:
+      SA_PASSWORD: "deleted_password&7U"
+      ACCEPT_EULA: "Y"
+    volumes:
+     - mssql-volume:/var/opt/mssql
+  seq:
+    image: datalust/seq:2020.4
+    ports:
+      - 8081:80
+    container_name: polishnewsharvester_seq
+    environment:
+      ACCEPT_EULA: "Y"
+    volumes:
+     - seq-volume:/data
+volumes:
+  mssql-volume:
+    driver: local
+  seq-volume:
+    driver: local

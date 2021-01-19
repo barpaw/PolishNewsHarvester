@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PolishNewsHarvester.Common.Dto
+namespace PolishNewsHarvesterSdk.Dto
 {
-    class NewsMetadataDto
+    public class NewsMetadataDto
     {
         public string Title { get; set; }
         public string Url { get; set; }

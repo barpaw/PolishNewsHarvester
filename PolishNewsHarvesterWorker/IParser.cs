@@ -1,6 +1,6 @@
 using System;
 
-namespace PolishNewsHarvester
+namespace PolishNewsHarvesterWorker
 {
     public interface IParser
     {

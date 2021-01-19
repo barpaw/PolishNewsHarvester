@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PolishNewsHarvester.Common.Dto;
-using PolishNewsHarvester.NewsSites;
+using PolishNewsHarvesterSdk.Dto;
+using PolishNewsHarvesterWorker.NewsSites;
 
-namespace PolishNewsHarvester
+namespace PolishNewsHarvesterWorker
 {
     class Harvester<TNewsSite> where TNewsSite : INewsSite
     {

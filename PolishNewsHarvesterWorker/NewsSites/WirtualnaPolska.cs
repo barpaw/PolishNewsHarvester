@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using PolishNewsHarvester.Common.Dto;
+using PolishNewsHarvesterSdk.Dto;
 
-namespace PolishNewsHarvester.NewsSites
+namespace PolishNewsHarvesterWorker.NewsSites
 {
     class WirtualnaPolska : INewsSite
     {
@@ -17,16 +17,22 @@ namespace PolishNewsHarvester.NewsSites
 
         public ICollection<NewsMetadataDto> Parse()
         {
-            
+
+            // Simple Html Case
+
             // Step 1 -> Get Response From SearchByTagUrl
             // Step 2 -> Parse Response To Get Articles Links
             // Step 3 -> Get Responses From Article Links
             // Step 4 -> Parse Article
             // Step 5 -> return
-            
-            
-            
-            
+
+            // Simple Json Case
+
+            // Step 1 -> Get Response From SearchByTagUrl
+            // Step 2 -> Parse Metadata from Json
+            // Step 3 -> return
+
+
             throw new NotImplementedException();
         }
         
