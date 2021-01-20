@@ -46,13 +46,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <ProjectReference Include="..\PolishNewsHarvesterSdk\PolishNewsHarvesterSdk.csproj" />
-  </ItemGroup>
-
-    <ItemGroup>
-    <ProjectReference Include="..\PolishNewsHarvesterWorker\PolishNewsHarvesterWorker.csproj" />
-  </ItemGroup>
-
 </Project>

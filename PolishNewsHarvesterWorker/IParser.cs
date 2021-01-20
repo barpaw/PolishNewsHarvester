@@ -1,11 +1,11 @@
 using System;
+using System.Collections.Generic;
+using PolishNewsHarvesterSdk.Dto;
 
 namespace PolishNewsHarvesterWorker
 {
     public interface IParser
     {
-        void ParseHtml(Func<string, int> htmlParser);
-        void ParseXml(Func<string, int> xmlParser);
-        void ParseJson(Func<string, int> jsonParser);
+        void FetchAndParse(string url, ICollection<Func<string, ParseMethodResultDto>> parsingMethods);
     }
 }

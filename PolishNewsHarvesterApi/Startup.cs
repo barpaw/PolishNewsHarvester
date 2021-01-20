@@ -31,25 +31,28 @@ namespace PolishNewsHarvesterApi
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = Configuration["app:name"], Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = Configuration["app:name"], Version = "v1"});
             });
 
             //HttpClient
-            services.AddHttpClient(HttpClients.DefaultClient, client =>
-            {
-                client.DefaultRequestHeaders.UserAgent.TryParseAdd(UserAgents.GoogleBot);
-            }).AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(3, retryCount => TimeSpan.FromMilliseconds(300), (result, timeSpan, retryCount, context) =>
-            {
-                if (result.Exception != null)
-                {
-                    Log.Error(result.Exception, "An exception occurred on retry {RetryAttempt} for {PolicyKey}", retryCount, context.PolicyKey);
-                }
-                else
-                {
-                    Log.Error("A non success code {StatusCode} was received on retry {RetryAttempt} for {PolicyKey}",
-                        (int)result.Result.StatusCode, retryCount, context.PolicyKey);
-                }
-            }));
+            services
+                .AddHttpClient(HttpClients.DefaultClient,
+                    client => { client.DefaultRequestHeaders.UserAgent.TryParseAdd(UserAgents.GoogleBot); })
+                .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(3,
+                    retryCount => TimeSpan.FromMilliseconds(300), (result, timeSpan, retryCount, context) =>
+                    {
+                        if (result.Exception != null)
+                        {
+                            Log.Error(result.Exception, "An exception occurred on retry {RetryAttempt} for {PolicyKey}",
+                                retryCount, context.PolicyKey);
+                        }
+                        else
+                        {
+                            Log.Error(
+                                "A non success code {StatusCode} was received on retry {RetryAttempt} for {PolicyKey}",
+                                (int) result.Result.StatusCode, retryCount, context.PolicyKey);
+                        }
+                    }));
 
             //SqlServer
             /*
@@ -89,6 +92,8 @@ namespace PolishNewsHarvesterApi
             services.AddMemoryCache();
 
             services.AddTransient<IHttpManager, HttpManager>();
+            services.AddTransient<IFetcher, Fetcher>();
+            services.AddTransient<IParser, Parser>();
             services.AddHostedService<Worker>();
         }
 
@@ -108,10 +113,7 @@ namespace PolishNewsHarvesterApi
             app.UseAuthorization();
 
             app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
