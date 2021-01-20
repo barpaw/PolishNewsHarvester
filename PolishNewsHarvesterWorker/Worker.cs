@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PolishNewsHarvesterSdk.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,14 @@ namespace PolishNewsHarvesterWorker
     {
         private readonly ILogger<Worker> _logger;
         private IConfiguration _configuration;
+        private IHttpManager _httpManager;
 
-        public Worker(ILogger<Worker> logger, IConfiguration configuration)
+
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, IHttpManager httpManager)
         {
             _logger = logger;
             _configuration = configuration;
+            _httpManager = httpManager;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -41,13 +45,17 @@ namespace PolishNewsHarvesterWorker
 
                 });
 
-                await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(100), stoppingToken);
             }
         }
 
-        private void RunWorker()
+        private async void RunWorker()
         {
             _logger.LogInformation("{workerName}: Ok", _configuration["app:workerName"]);
+            var x = await _httpManager.SendGetRequestAsync("https://wiadomosci.wp.pl/tag/test");
+            var y = await x.Content.ReadAsStringAsync();
+            _logger.LogInformation(y);
+
         }
     }
 }

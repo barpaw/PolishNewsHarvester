@@ -27,6 +27,7 @@ namespace PolishNewsHarvesterApi
                 .AddEnvironmentVariables()
                 .Build();
 
+
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
                 .CreateLogger();
