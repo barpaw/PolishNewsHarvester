@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PolishNewsHarvesterSdk.Http;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Data.SqlClient.Server;
+using PolishNewsHarvesterSdk.Domain;
 using PolishNewsHarvesterSdk.Dto;
 
 namespace PolishNewsHarvesterWorker
@@ -56,32 +58,32 @@ namespace PolishNewsHarvesterWorker
         {
             _logger.LogInformation("{workerName}: Ok", _configuration["app:workerName"]);
 
-            var list = new List<Func<string, ParseMethodResultDto>>();
+            var list = new List<Func<Method, Method>>();
 
             list.Add(TestMethod);
             list.Add(TestMethod2);
             list.Add(TestMethod3);
 
-            _parser.FetchAndParse("https://wiadomosci.wp.pl/tag/covid", list);
+            _parser.FetchAndParse("https://wiadomosci.wp.pl/tag/abw", list);
         }
 
-        public ParseMethodResultDto TestMethod(string body)
+        public Method TestMethod(ICollection<Parameter> body)
         {
             body = "x";
             var ret = $"{body} test";
 
-            return new ParseMethodResultDto("Test1", ret, ret.GetType());
+            return new ParseMethodResultDto("Test1", ret);
         }
 
-        public ParseMethodResultDto TestMethod2(string body)
+        public Method TestMethod2(Method body)
         {
             body = " y ";
             var ret = $"{body} test2";
 
-            return new ParseMethodResultDto("Test2", ret, ret.GetType());
+            return new ParseMethodResultDto("Test2", ret);
         }
         
-        public ParseMethodResultDto TestMethod3(string body)
+        public Method TestMethod3(Method body)
         {
             
             var htmlDoc = new HtmlDocument();
@@ -97,7 +99,7 @@ namespace PolishNewsHarvesterWorker
                 // {
                 //     _logger.LogInformation(link.InnerText);
                 // }
-                _logger.LogInformation(divNode.InnerText.Trim());
+                _logger.LogInformation(divNode.Attributes["href"].Value);
             }
             
             /*
@@ -108,7 +110,7 @@ namespace PolishNewsHarvesterWorker
             */
 
             var ret = "ds";
-            return new ParseMethodResultDto("Test3", ret, ret.GetType());
+            return new ParseMethodResultDto("Test3", ret);
         }
     }
 }

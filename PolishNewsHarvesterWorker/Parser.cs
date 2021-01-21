@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PolishNewsHarvesterSdk.Domain;
 using PolishNewsHarvesterSdk.Dto;
 
 namespace PolishNewsHarvesterWorker
@@ -22,7 +23,7 @@ namespace PolishNewsHarvesterWorker
             _fetcher = fetcher;
         }
 
-        public async void FetchAndParse(string url, ICollection<Func<string, ParseMethodResultDto>> parsingMethods)
+        public async void FetchAndParse(string url, ICollection<Func<Method, Method>> parsingMethods)
         {
             var httpResponseDto = await _fetcher.FetchUrl(url);
             
