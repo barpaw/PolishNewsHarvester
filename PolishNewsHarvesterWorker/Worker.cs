@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Data.SqlClient.Server;
-using PolishNewsHarvesterSdk.Domain;
 using PolishNewsHarvesterSdk.Dto;
+using PolishNewsHarvesterSdk.Methods;
 
 namespace PolishNewsHarvesterWorker
 {
@@ -58,15 +58,24 @@ namespace PolishNewsHarvesterWorker
         {
             _logger.LogInformation("{workerName}: Ok", _configuration["app:workerName"]);
 
+            var x = new SendGetRequestAsync("tesst").InvokeMethod();
+
+            Console.WriteLine($"{x.Name} {x.Parameters.Count} {x.ReturnObject} {x.ReturnObjectType}");
+
+
+
+
+            /*
             var list = new List<Func<Method, Method>>();
 
             list.Add(TestMethod);
             list.Add(TestMethod2);
             list.Add(TestMethod3);
 
-            _parser.FetchAndParse("https://wiadomosci.wp.pl/tag/abw", list);
+            _parser.FetchAndParse("https://wiadomosci.wp.pl/tag/covid19", list);
+            */
         }
-
+        /*
         public Method TestMethod(ICollection<Parameter> body)
         {
             body = "x";
@@ -102,15 +111,11 @@ namespace PolishNewsHarvesterWorker
                 _logger.LogInformation(divNode.Attributes["href"].Value);
             }
             
-            /*
-            foreach(HtmlNode link in x.SelectNodes("//a[@href]"))
-            {
-                _logger.LogInformation(link.InnerText);
-            }
-            */
 
             var ret = "ds";
             return new ParseMethodResultDto("Test3", ret);
         }
+
+        */
     }
 }
