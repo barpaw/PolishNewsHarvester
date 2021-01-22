@@ -11,8 +11,11 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Data.SqlClient.Server;
+using Newtonsoft.Json;
+using PolishNewsHarvesterSdk;
 using PolishNewsHarvesterSdk.Dto;
 using PolishNewsHarvesterSdk.Methods;
+using PolishNewsHarvesterSdk.Targets;
 
 namespace PolishNewsHarvesterWorker
 {
@@ -50,7 +53,7 @@ namespace PolishNewsHarvesterWorker
                     }
                 });
 
-                await Task.Delay(TimeSpan.FromSeconds(100), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
             }
         }
 
@@ -58,12 +61,22 @@ namespace PolishNewsHarvesterWorker
         {
             _logger.LogInformation("{workerName}: Ok", _configuration["app:workerName"]);
 
-            var x = new SendGetRequestAsync("tesst").InvokeMethod();
 
-            Console.WriteLine($"{x.Name} {x.Parameters.Count} {x.ReturnObject} {x.ReturnObjectType}");
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .Select(x => x.GetTypesWithInterface<INewsSiteSearchByTag>())
+                .SelectMany(i => i);
 
+            foreach (Type type in types)
+            {
+                object instance = Activator.CreateInstance(type, "pizda");
+                INewsSiteSearchByTag adsds = instance as INewsSiteSearchByTag;
+                var x = adsds.GetNewsByTag();
 
-
+                foreach (var methodInvocationResult in x)
+                {
+                    Console.WriteLine(JsonConvert.SerializeObject(methodInvocationResult));
+                }
+            }
 
             /*
             var list = new List<Func<Method, Method>>();
@@ -75,6 +88,7 @@ namespace PolishNewsHarvesterWorker
             _parser.FetchAndParse("https://wiadomosci.wp.pl/tag/covid19", list);
             */
         }
+
         /*
         public Method TestMethod(ICollection<Parameter> body)
         {
