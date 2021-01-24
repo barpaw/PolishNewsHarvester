@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using PolishNewsHarvesterCommon.HarvesterMethods;
 using PolishNewsHarvesterSdk.Dto;
-using PolishNewsHarvesterSdk.Methods;
 
-namespace PolishNewsHarvesterSdk.Targets
+namespace PolishNewsHarvesterCommon.NewsSites
 {
     public class WirtualnaPolska : IWirtualnaPolska
     {
@@ -22,8 +22,8 @@ namespace PolishNewsHarvesterSdk.Targets
         {
 
 
-            _methods.SendGetRequestAsync(GetNewsByTagUrl + tag);
-            _methods.SendGetRequestAsyncTest("dsdadas");
+            var httpResponseDto = _methods.SendGetRequestAsync(GetNewsByTagUrl + tag);
+            _methods.GetHrefValuesByXpath(httpResponseDto.Body, "//a[@class='f2PrHTUx']");
 
             return new List<NewsMetadataDto>();
 

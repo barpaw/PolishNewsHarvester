@@ -12,9 +12,8 @@ using Microsoft.OpenApi.Models;
 using PolishNewsHarvesterSdk.Consts;
 using PolishNewsHarvesterWorker;
 using PolishNewsHarvesterSdk.Http;
-using PolishNewsHarvesterSdk.Methods.Abstractions;
-using PolishNewsHarvesterSdk.Targets;
-using PolishNewsHarvesterSdk.Methods;
+using PolishNewsHarvesterCommon.HarvesterMethods;
+using PolishNewsHarvesterCommon.NewsSites;
 
 namespace PolishNewsHarvesterApi
 {

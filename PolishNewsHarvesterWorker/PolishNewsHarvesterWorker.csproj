@@ -50,7 +50,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PolishNewsHarvesterCommon\PolishNewsHarvesterCommon.csproj" />
-    <ProjectReference Include="..\PolishNewsHarvesterSdk\PolishNewsHarvesterSdk.csproj" />
   </ItemGroup>
 
 </Project>

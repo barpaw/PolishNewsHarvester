@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using PolishNewsHarvesterSdk.Domain;
+﻿using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 using PolishNewsHarvesterSdk.Dto;
-using PolishNewsHarvesterSdk.Enums;
 using PolishNewsHarvesterSdk.Http;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PolishNewsHarvesterSdk.Methods
+namespace PolishNewsHarvesterCommon.HarvesterMethods
 {
     public class Methods : IMethods
     {
@@ -23,12 +22,8 @@ namespace PolishNewsHarvesterSdk.Methods
             _httpManager = httpManager;
         }
 
-        public MethodInvocationResult SendGetRequestAsync(string url)
+        public HttpResponseDto SendGetRequestAsync(string url)
         {
-            List<MethodParameter> methodParameters = new List<MethodParameter>();
-            methodParameters.Add(new MethodParameter(url, url.GetType()));
-
-
             var defaultHttpResponseDto = new HttpResponseDto(url, string.Empty, -1, string.Empty);
 
             try
@@ -72,20 +67,18 @@ namespace PolishNewsHarvesterSdk.Methods
 
             Console.WriteLine($"{defaultHttpResponseDto.Url}: {defaultHttpResponseDto.StatusCode}");
 
-            Console.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {url} {url.GetType()} {url}");
-            return new MethodInvocationResult(System.Reflection.MethodBase.GetCurrentMethod().Name, methodParameters, "test", "test".GetType(), null, MethodInvocationState.MethodInvoked);
+            return defaultHttpResponseDto;
         }
 
-        public MethodInvocationResult SendGetRequestAsyncTest(string url)
+        public void GetHrefValuesByXpath(string body, string xpath)
         {
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(body);
 
-            List<MethodParameter> methodParameters = new List<MethodParameter>();
-
-            methodParameters.Add(new MethodParameter(url, url.GetType()));
-
-            Console.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {url} {url.GetType()} {url}");
-
-            return new MethodInvocationResult(System.Reflection.MethodBase.GetCurrentMethod().Name, methodParameters, "test", "test".GetType(), null, MethodInvocationState.MethodInvoked);
+            foreach (HtmlNode divNode in htmlDoc.DocumentNode.SelectNodes(xpath))
+            {
+                _logger.LogInformation(divNode.Attributes["href"].Value);
+            }
         }
     }
 }

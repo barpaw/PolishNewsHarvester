@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using PolishNewsHarvesterSdk.Domain;
 using PolishNewsHarvesterSdk.Dto;
 
-namespace PolishNewsHarvesterSdk.Targets
+namespace PolishNewsHarvesterCommon.NewsSites.Interfaces
 {
     public interface INewsSiteSearchByTag
     {

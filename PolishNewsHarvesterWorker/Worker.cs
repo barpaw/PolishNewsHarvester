@@ -14,8 +14,8 @@ using Microsoft.Data.SqlClient.Server;
 using Newtonsoft.Json;
 using PolishNewsHarvesterSdk;
 using PolishNewsHarvesterSdk.Dto;
-using PolishNewsHarvesterSdk.Methods;
 using PolishNewsHarvesterSdk.Targets;
+using PolishNewsHarvesterCommon.NewsSites;
 
 namespace PolishNewsHarvesterWorker
 {
@@ -63,58 +63,8 @@ namespace PolishNewsHarvesterWorker
 
             _wirtualnaPolska.GetNewsByTag("covid19");
 
-            /*
-            var list = new List<Func<Method, Method>>();
 
-            list.Add(TestMethod);
-            list.Add(TestMethod2);
-            list.Add(TestMethod3);
-
-            _parser.FetchAndParse("https://wiadomosci.wp.pl/tag/covid19", list);
-            */
         }
 
-        /*
-        public Method TestMethod(ICollection<Parameter> body)
-        {
-            body = "x";
-            var ret = $"{body} test";
-
-            return new ParseMethodResultDto("Test1", ret);
-        }
-
-        public Method TestMethod2(Method body)
-        {
-            body = " y ";
-            var ret = $"{body} test2";
-
-            return new ParseMethodResultDto("Test2", ret);
-        }
-        
-        public Method TestMethod3(Method body)
-        {
-            
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(body);
-            
-            //data-reactid="240"
-
-
-            foreach (HtmlNode divNode in htmlDoc.DocumentNode.SelectNodes("//a[@class='f2PrHTUx']"))
-            {
-                
-                // foreach(HtmlNode link in divNode.SelectNodes("//a[@href]"))
-                // {
-                //     _logger.LogInformation(link.InnerText);
-                // }
-                _logger.LogInformation(divNode.Attributes["href"].Value);
-            }
-            
-
-            var ret = "ds";
-            return new ParseMethodResultDto("Test3", ret);
-        }
-
-        */
     }
 }
