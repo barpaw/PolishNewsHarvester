@@ -23,14 +23,14 @@ namespace PolishNewsHarvesterWorker
     {
         private readonly ILogger<Worker> _logger;
         private IConfiguration _configuration;
-        private IParser _parser;
+        private IWirtualnaPolska _wirtualnaPolska;
 
 
-        public Worker(ILogger<Worker> logger, IConfiguration configuration, IParser parser)
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, IWirtualnaPolska wirtualnaPolska)
         {
             _logger = logger;
             _configuration = configuration;
-            _parser = parser;
+            _wirtualnaPolska = wirtualnaPolska;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -61,22 +61,7 @@ namespace PolishNewsHarvesterWorker
         {
             _logger.LogInformation("{workerName}: Ok", _configuration["app:workerName"]);
 
-
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .Select(x => x.GetTypesWithInterface<INewsSiteSearchByTag>())
-                .SelectMany(i => i);
-
-            foreach (Type type in types)
-            {
-                object instance = Activator.CreateInstance(type, "pizda");
-                INewsSiteSearchByTag adsds = instance as INewsSiteSearchByTag;
-                var x = adsds.GetNewsByTag();
-
-                foreach (var methodInvocationResult in x)
-                {
-                    Console.WriteLine(JsonConvert.SerializeObject(methodInvocationResult));
-                }
-            }
+            _wirtualnaPolska.GetNewsByTag("covid19");
 
             /*
             var list = new List<Func<Method, Method>>();

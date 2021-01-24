@@ -5,10 +5,8 @@ namespace PolishNewsHarvesterSdk.Targets
 {
     public interface INewsSiteSearchByTag : INewsSite
     {
-        public string GetNewsByTagUrl { get; init; }
-        public string Tag { get; init; }
+        public string GetNewsByTagUrl { get; set; }
 
-
-        ICollection<MethodInvocationResult> GetNewsByTag();
+        ICollection<MethodInvocationResult> GetNewsByTag(string tag);
     }
 }

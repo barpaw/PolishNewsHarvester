@@ -1,28 +1,31 @@
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using PolishNewsHarvesterSdk.Domain;
 using PolishNewsHarvesterSdk.Methods;
+using PolishNewsHarvesterSdk.Methods.Abstractions;
 
 namespace PolishNewsHarvesterSdk.Targets
 {
-    public class WirtualnaPolska : INewsSiteSearchByTag
+    public class WirtualnaPolska : IWirtualnaPolska
     {
-        public string GetNewsByTagUrl { get; init; }
-        public string Tag { get; init; }
+        public string GetNewsByTagUrl { get; set; } = "https://wiadomosci.wp.pl/tag/";
 
-        public WirtualnaPolska(string tag)
+        private readonly ILogger<WirtualnaPolska> _logger;
+        private IMethods _methods;
+
+        public WirtualnaPolska(ILogger<WirtualnaPolska> logger, IMethods methods)
         {
-            Tag = tag;
+            _logger = logger;
+            _methods = methods;
         }
 
-        public ICollection<MethodInvocationResult> GetNewsByTag()
+        public ICollection<MethodInvocationResult> GetNewsByTag(string tag)
         {
             List<MethodInvocationResult> mIR = new List<MethodInvocationResult>();
 
-            mIR.Add(new SendGetRequestAsync("tesst").InvokeMethod());
-            mIR.Add(new SendGetRequestAsyncTest("dsds").InvokeMethod());
-            mIR.Add(new SendGetRequestAsync("dsdsds").InvokeMethod());
-            mIR.Add(new SendGetRequestAsyncTest("dsdsdsdsds").InvokeMethod());
-            mIR.Add(new SendGetRequestAsync("csccc").InvokeMethod());
+            mIR.Add(_methods.SendGetRequestAsync($"{GetNewsByTagUrl}{tag}"));
+            mIR.Add(_methods.SendGetRequestAsyncTest("zxc"));
+
 
             return mIR;
         }

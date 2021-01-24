@@ -12,6 +12,9 @@ using Microsoft.OpenApi.Models;
 using PolishNewsHarvesterSdk.Consts;
 using PolishNewsHarvesterWorker;
 using PolishNewsHarvesterSdk.Http;
+using PolishNewsHarvesterSdk.Methods.Abstractions;
+using PolishNewsHarvesterSdk.Targets;
+using PolishNewsHarvesterSdk.Methods;
 
 namespace PolishNewsHarvesterApi
 {
@@ -31,7 +34,7 @@ namespace PolishNewsHarvesterApi
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = Configuration["app:name"], Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = Configuration["app:name"], Version = "v1" });
             });
 
             //HttpClient
@@ -50,7 +53,7 @@ namespace PolishNewsHarvesterApi
                         {
                             Log.Error(
                                 "A non success code {StatusCode} was received on retry {RetryAttempt} for {PolicyKey}",
-                                (int) result.Result.StatusCode, retryCount, context.PolicyKey);
+                                (int)result.Result.StatusCode, retryCount, context.PolicyKey);
                         }
                     }));
 
@@ -91,9 +94,9 @@ namespace PolishNewsHarvesterApi
 
             services.AddMemoryCache();
 
+            services.AddSingleton<IMethods, Methods>();
+            services.AddSingleton<IWirtualnaPolska, WirtualnaPolska>();
             services.AddTransient<IHttpManager, HttpManager>();
-            services.AddTransient<IFetcher, Fetcher>();
-            services.AddTransient<IParser, Parser>();
             services.AddHostedService<Worker>();
         }
 
