@@ -23,13 +23,15 @@ namespace PolishNewsHarvesterWorker
         private IConfiguration _configuration;
         private IWirtualnaPolska _wirtualnaPolska;
         private IPolskaAgencjaPrasowa _polskaAgencjaPrasowa;
+        private ITvpInfo _tvpInfo;
 
-        public Worker(ILogger<Worker> logger, IConfiguration configuration, IWirtualnaPolska wirtualnaPolska, IPolskaAgencjaPrasowa polskaAgencjaPrasowa)
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, IWirtualnaPolska wirtualnaPolska, IPolskaAgencjaPrasowa polskaAgencjaPrasowa, ITvpInfo tvpInfo)
         {
             _logger = logger;
             _configuration = configuration;
             _wirtualnaPolska = wirtualnaPolska;
             _polskaAgencjaPrasowa = polskaAgencjaPrasowa;
+            _tvpInfo = tvpInfo;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -60,11 +62,20 @@ namespace PolishNewsHarvesterWorker
         {
             _logger.LogInformation("{workerName}: Ok", _configuration["app:workerName"]);
 
-            await _wirtualnaPolska.GetNewsByTag("szczepionka");
-            await _wirtualnaPolska.GetNewsByTag("covid-19");
 
-            await _polskaAgencjaPrasowa.GetNewsByTag("szczepionka");
-            await _polskaAgencjaPrasowa.GetNewsByTag("covid-19");
+            var tag = "szczepionka";
+            var tag2 = "covid-19";
+
+            await _wirtualnaPolska.GetNewsByTag(tag);
+            await _wirtualnaPolska.GetNewsByTag(tag2);
+
+            await _polskaAgencjaPrasowa.GetNewsByTag(tag);
+            await _polskaAgencjaPrasowa.GetNewsByTag(tag2);
+            
+
+            await _tvpInfo.GetNewsByTag(tag);
+            await _tvpInfo.GetNewsByTag(tag2);
+
 
         }
 

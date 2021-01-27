@@ -109,6 +109,56 @@ namespace PolishNewsHarvesterCommon.HarvesterMethods
 
             return hrefs;
         }
+
+        public List<string> GetNodesHrefsValuesByXpathAndParentNodeXpath(string body, string parentNodeXpath, string hrefXpath)
+        {
+
+            var hrefs = new List<string>();
+
+            try
+            {
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(body);
+
+                var parentNodes = htmlDoc.DocumentNode.SelectNodes(parentNodeXpath);
+
+                if (parentNodes != null)
+                {
+
+                    foreach (HtmlNode pNode in parentNodes)
+                    {
+                        var hrefNode = htmlDoc.DocumentNode.SelectSingleNode(hrefXpath);
+
+                        if (hrefNode != null)
+                        {
+                            hrefs.Add(pNode.Attributes["href"].Value.Trim());
+                        }
+                        else
+                        {
+                            throw new Exception("Nodes selected by given hrefXpath equals null.");
+                        }
+
+
+                    }
+
+                    _logger.LogInformation("{workerName}: ParentNodes count: {nodesCount}.", "GetHrefValuesByXpath", parentNodes.Count);
+                    _logger.LogInformation("{workerName}: hrefs count: {nodesCount}.", "GetHrefValuesByXpath", hrefs.Count);
+
+                }
+                else
+                {
+                    throw new Exception("Nodes selected by given parentXpath equals null.");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "{workerName}: Exception caught in method GetNodesHrefsValuesByXpathAndParentNodeXpath.", "Methods");
+                throw;
+            }
+
+            return hrefs;
+        }
+
         public string AddStringAtBeginning(string strToAppend, string originalStr)
         {
             return $"{strToAppend}{originalStr}";
@@ -164,6 +214,57 @@ namespace PolishNewsHarvesterCommon.HarvesterMethods
 
             return newsMetadataDto;
         }
+
+        public List<string> GetNodesInnerTextByXpathAsStrings(NewsMetadataDto newsMetadataDto, List<string> xpaths)
+        {
+
+            var retVal = new List<string>();
+
+            try
+            {
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(newsMetadataDto.HtmlBody);
+
+
+                HtmlNodeCollection validNodes = null;
+
+                foreach (var xpath in xpaths)
+                {
+                    var nodes = htmlDoc.DocumentNode.SelectNodes(xpath);
+
+                    if (nodes != null)
+                    {
+                        validNodes = nodes;
+                        break;
+                    }
+                }
+
+                if (validNodes != null)
+                {
+
+                    foreach (HtmlNode divNode in validNodes)
+                    {
+
+                        _logger.LogInformation("{workerName}: {as}", "GetNodesInnerTextByXpathAsStrings", divNode.InnerText.Trim());
+                        retVal.Add(divNode.InnerText.Trim());
+                    }
+
+                }
+                else
+                {
+                    _logger.LogError("Nodes selected by given xpath equals null. URL: {url} XPATH: {xpath}", newsMetadataDto.Url, String.Join(", ", xpaths));
+                    retVal = new List<string>();
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "{workerName}: Exception caught in method GetNodesInnerTextByXpathAsStrings.", "Methods");
+                throw;
+            }
+
+            return retVal;
+        }
+
         public NewsMetadataDto GetNodeInnerTextByXpath(NewsMetadataDto newsMetadataDto, List<string> xpaths, NewsMetadataValue newsMetadataValue)
         {
 

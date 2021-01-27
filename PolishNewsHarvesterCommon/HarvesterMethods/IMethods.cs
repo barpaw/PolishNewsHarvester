@@ -13,8 +13,10 @@ namespace PolishNewsHarvesterCommon.HarvesterMethods
     {
         Task<HttpResponseDto> SendGetRequestAsync(string url, string httpClientType);
         List<string> GetNodesHrefsValuesByXpath(string url, string xpath);
+        List<string> GetNodesHrefsValuesByXpathAndParentNodeXpath(string body, string parentNodeXpath, string hrefXpath);
         string AddStringAtBeginning(string strToAppend, string originalStr);
         NewsMetadataDto GetNodesInnerTextByXpath(NewsMetadataDto newsMetadataDto, List<string> xpaths, NewsMetadataValue newsMetadataValue);
+        List<string> GetNodesInnerTextByXpathAsStrings(NewsMetadataDto newsMetadataDto, List<string> xpaths);
         NewsMetadataDto GetNodeInnerTextByXpath(NewsMetadataDto newsMetadataDto, List<string> xpaths, NewsMetadataValue newsMetadataValue);
         List<string> RemoveStringsFromList(List<string> originalList, List<string> stringsToRemove);
         NewsMetadataDto GetNodeAttributeValueByXpath(NewsMetadataDto newsMetadataDto, List<string> xpaths, string attributeName, NewsMetadataValue newsMetadataValue);

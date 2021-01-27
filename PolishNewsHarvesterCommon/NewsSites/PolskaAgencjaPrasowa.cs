@@ -77,6 +77,7 @@ namespace PolishNewsHarvesterSdk.NewsSites
 
                 newsMetadataDtosWithTitlesTimeTagAuthorsValid.ForEach(newsMetadataDto => _logger.LogInformation(JsonConvert.SerializeObject(newsMetadataDto)));
 
+                returnListNewsMetadataDto = newsMetadataDtosWithTitlesTimeTagAuthorsValid;
             }
             catch (Exception e)
             {
