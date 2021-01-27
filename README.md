@@ -14,3 +14,4 @@ Implemented sources for news metadata:
 * wp.pl
 * pap.pl
 * tvpinfo.pl
+* gazeta.pl
