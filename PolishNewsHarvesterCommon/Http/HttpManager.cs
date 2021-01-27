@@ -22,13 +22,14 @@ namespace PolishNewsHarvesterSdk.Http
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<HttpResponseMessage> SendGetRequestAsync(string url)
+        public async Task<HttpResponseMessage> SendGetRequestAsync(string url, string httpClientType)
         {
             try
             {
 
-                using (var httpClient = _httpClientFactory.CreateClient(HttpClients.DefaultClient))
+                using (var httpClient = _httpClientFactory.CreateClient(httpClientType))
                 {
+
 
                     return await httpClient.GetAsync(url);
 

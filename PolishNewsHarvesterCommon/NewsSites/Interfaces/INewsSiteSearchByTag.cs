@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using PolishNewsHarvesterSdk.Dto;
+using System.Threading.Tasks;
+using PolishNewsHarvesterCommon.Dto;
 
 namespace PolishNewsHarvesterCommon.NewsSites.Interfaces
 {
@@ -7,6 +8,6 @@ namespace PolishNewsHarvesterCommon.NewsSites.Interfaces
     {
         public string GetNewsByTagUrl { get; set; }
 
-        ICollection<NewsMetadataDto> GetNewsByTag(string tag);
+        Task<ICollection<NewsMetadataDto>> GetNewsByTag(string tag);
     }
 }

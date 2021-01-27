@@ -13,7 +13,7 @@ using PolishNewsHarvesterSdk.Consts;
 using PolishNewsHarvesterWorker;
 using PolishNewsHarvesterSdk.Http;
 using PolishNewsHarvesterCommon.HarvesterMethods;
-using PolishNewsHarvesterCommon.NewsSites;
+using PolishNewsHarvesterSdk.NewsSites;
 
 namespace PolishNewsHarvesterApi
 {
@@ -76,6 +76,8 @@ namespace PolishNewsHarvesterApi
 
             });
             */
+
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -91,10 +93,12 @@ namespace PolishNewsHarvesterApi
                 });
             });
 
+
             services.AddMemoryCache();
 
-            services.AddSingleton<IMethods, Methods>();
-            services.AddSingleton<IWirtualnaPolska, WirtualnaPolska>();
+            services.AddTransient<IMethods, Methods>();
+            services.AddTransient<IWirtualnaPolska, WirtualnaPolska>();
+            services.AddTransient<IPolskaAgencjaPrasowa, PolskaAgencjaPrasowa>();
             services.AddTransient<IHttpManager, HttpManager>();
             services.AddHostedService<Worker>();
         }

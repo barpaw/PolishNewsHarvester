@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PolishNewsHarvesterSdk.NewsSites
 {
-    public interface IWirtualnaPolska : INewsSiteSearchByTag
+    public interface IPolskaAgencjaPrasowa : INewsSiteSearchByTag
     {
 
     }

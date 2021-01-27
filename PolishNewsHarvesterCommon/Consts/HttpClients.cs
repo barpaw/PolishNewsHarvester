@@ -7,5 +7,6 @@ namespace PolishNewsHarvesterSdk.Consts
     public class HttpClients
     {
         public static string DefaultClient { get; } = "DefaultClient";
+        public static string PolskaAgencjaPrasowa { get; } = "PolskaAgencjaPrasowa";
     }
 }

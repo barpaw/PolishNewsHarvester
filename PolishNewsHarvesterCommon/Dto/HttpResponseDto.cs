@@ -1,4 +1,4 @@
-namespace PolishNewsHarvesterSdk.Dto
+namespace PolishNewsHarvesterCommon.Dto
 {
     public class HttpResponseDto
     {
@@ -7,13 +7,13 @@ namespace PolishNewsHarvesterSdk.Dto
         public int StatusCode { get; init; }
         public string ResponseHeaders { get; init; }
 
-        public HttpResponseDto(string url, string body, int statusCode, string responseHeaders)
+        public HttpResponseDto(string url, byte[] body, int statusCode, string responseHeaders)
         {
             Url = url;
-            Body = body;
+            Body = System.Text.Encoding.UTF8.GetString(body, 0, body.Length);
             StatusCode = statusCode;
             ResponseHeaders = responseHeaders;
         }
-        
+
     }
 }

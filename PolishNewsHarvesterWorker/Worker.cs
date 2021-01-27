@@ -12,10 +12,8 @@ using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Data.SqlClient.Server;
 using Newtonsoft.Json;
-using PolishNewsHarvesterSdk;
-using PolishNewsHarvesterSdk.Dto;
-using PolishNewsHarvesterSdk.Targets;
 using PolishNewsHarvesterCommon.NewsSites;
+using PolishNewsHarvesterSdk.NewsSites;
 
 namespace PolishNewsHarvesterWorker
 {
@@ -24,13 +22,14 @@ namespace PolishNewsHarvesterWorker
         private readonly ILogger<Worker> _logger;
         private IConfiguration _configuration;
         private IWirtualnaPolska _wirtualnaPolska;
+        private IPolskaAgencjaPrasowa _polskaAgencjaPrasowa;
 
-
-        public Worker(ILogger<Worker> logger, IConfiguration configuration, IWirtualnaPolska wirtualnaPolska)
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, IWirtualnaPolska wirtualnaPolska, IPolskaAgencjaPrasowa polskaAgencjaPrasowa)
         {
             _logger = logger;
             _configuration = configuration;
             _wirtualnaPolska = wirtualnaPolska;
+            _polskaAgencjaPrasowa = polskaAgencjaPrasowa;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -53,7 +52,7 @@ namespace PolishNewsHarvesterWorker
                     }
                 });
 
-                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(99999), stoppingToken);
             }
         }
 
@@ -61,8 +60,11 @@ namespace PolishNewsHarvesterWorker
         {
             _logger.LogInformation("{workerName}: Ok", _configuration["app:workerName"]);
 
-            _wirtualnaPolska.GetNewsByTag("covid19");
+            await _wirtualnaPolska.GetNewsByTag("szczepionka");
+            await _wirtualnaPolska.GetNewsByTag("covid-19");
 
+            await _polskaAgencjaPrasowa.GetNewsByTag("szczepionka");
+            await _polskaAgencjaPrasowa.GetNewsByTag("covid-19");
 
         }
 
