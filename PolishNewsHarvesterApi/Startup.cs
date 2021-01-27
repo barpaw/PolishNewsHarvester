@@ -100,6 +100,7 @@ namespace PolishNewsHarvesterApi
             services.AddTransient<IWirtualnaPolska, WirtualnaPolska>();
             services.AddTransient<IPolskaAgencjaPrasowa, PolskaAgencjaPrasowa>();
             services.AddTransient<ITvpInfo, TvpInfo>();
+            services.AddTransient<IGazeta, Gazeta>();
             services.AddTransient<IHttpManager, HttpManager>();
             services.AddHostedService<Worker>();
         }

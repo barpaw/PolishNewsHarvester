@@ -24,14 +24,16 @@ namespace PolishNewsHarvesterWorker
         private IWirtualnaPolska _wirtualnaPolska;
         private IPolskaAgencjaPrasowa _polskaAgencjaPrasowa;
         private ITvpInfo _tvpInfo;
+        private IGazeta _gazeta;
 
-        public Worker(ILogger<Worker> logger, IConfiguration configuration, IWirtualnaPolska wirtualnaPolska, IPolskaAgencjaPrasowa polskaAgencjaPrasowa, ITvpInfo tvpInfo)
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, IWirtualnaPolska wirtualnaPolska, IPolskaAgencjaPrasowa polskaAgencjaPrasowa, ITvpInfo tvpInfo, IGazeta gazeta)
         {
             _logger = logger;
             _configuration = configuration;
             _wirtualnaPolska = wirtualnaPolska;
             _polskaAgencjaPrasowa = polskaAgencjaPrasowa;
             _tvpInfo = tvpInfo;
+            _gazeta = gazeta;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -63,8 +65,9 @@ namespace PolishNewsHarvesterWorker
             _logger.LogInformation("{workerName}: Ok", _configuration["app:workerName"]);
 
 
-            var tag = "szczepionka";
+            var tag = "szczepionki";
             var tag2 = "covid-19";
+            
 
             await _wirtualnaPolska.GetNewsByTag(tag);
             await _wirtualnaPolska.GetNewsByTag(tag2);
@@ -75,6 +78,10 @@ namespace PolishNewsHarvesterWorker
 
             await _tvpInfo.GetNewsByTag(tag);
             await _tvpInfo.GetNewsByTag(tag2);
+            
+
+            await _gazeta.GetNewsByTag(tag);
+            await _gazeta.GetNewsByTag(tag2);
 
 
         }

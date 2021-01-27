@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace PolishNewsHarvesterCommon.HarvesterMethods
 {
@@ -110,7 +111,7 @@ namespace PolishNewsHarvesterCommon.HarvesterMethods
             return hrefs;
         }
 
-        public List<string> GetNodesHrefsValuesByXpathAndParentNodeXpath(string body, string parentNodeXpath, string hrefXpath)
+        public List<string> GetNodesHrefsValuesByXpathAndParentNodeXpath(string body, string parentNodeXpath)
         {
 
             var hrefs = new List<string>();
@@ -127,15 +128,18 @@ namespace PolishNewsHarvesterCommon.HarvesterMethods
 
                     foreach (HtmlNode pNode in parentNodes)
                     {
-                        var hrefNode = htmlDoc.DocumentNode.SelectSingleNode(hrefXpath);
+                        _logger.LogInformation("{a}", pNode.InnerHtml);
+                        var hrefNode = pNode.Descendants("a").FirstOrDefault();
+
+                        _logger.LogInformation("{a}", hrefNode?.Attributes["href"]?.Value?.Trim());
 
                         if (hrefNode != null)
                         {
-                            hrefs.Add(pNode.Attributes["href"].Value.Trim());
+                            hrefs.Add(hrefNode.Attributes["href"].Value.Trim());
                         }
                         else
                         {
-                            throw new Exception("Nodes selected by given hrefXpath equals null.");
+                            // throw new Exception("Nodes selected by given hrefXpath equals null.");
                         }
 
 
@@ -157,6 +161,49 @@ namespace PolishNewsHarvesterCommon.HarvesterMethods
             }
 
             return hrefs;
+        }
+
+        public List<string> GetHtmlNodesAsStrings(string body, string xpath)
+        {
+            var retNodes = new List<string>();
+
+            try
+            {
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(body);
+
+                var nodes = htmlDoc.DocumentNode.SelectNodes(xpath);
+
+                if (nodes != null)
+                {
+
+                    foreach (HtmlNode pNode in nodes)
+                    {
+
+                        var html = pNode.InnerHtml;
+
+
+                        _logger.LogInformation("{innerHtml}", html);
+
+                        retNodes.Add(html);
+
+                    }
+
+                    _logger.LogInformation("{workerName}: Nodes count: {nodesCount}.", "GetHtmlNodesAsStrings", retNodes.Count);
+
+                }
+                else
+                {
+                    throw new Exception("Nodes selected by given xpath equals null.");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "{workerName}: Exception caught in method GetHtmlNodesAsStrings.", "Methods");
+                throw;
+            }
+
+            return retNodes;
         }
 
         public string AddStringAtBeginning(string strToAppend, string originalStr)
@@ -342,6 +389,7 @@ namespace PolishNewsHarvesterCommon.HarvesterMethods
                 {
                     _logger.LogInformation("{workerName}: {as}", "GetNodeAttributeValueByXpath", validNode.Attributes[attributeName].Value.Trim());
                     retVal = validNode.Attributes[attributeName].Value.Trim();
+
                 }
                 else
                 {

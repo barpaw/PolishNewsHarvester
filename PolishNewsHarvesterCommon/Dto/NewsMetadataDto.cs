@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Web;
 
 namespace PolishNewsHarvesterCommon.Dto
 {
@@ -13,10 +14,20 @@ namespace PolishNewsHarvesterCommon.Dto
             HtmlBody = httpResponseDto.Body;
         }
 
-        public string Title { get; set; }
-        public string Url { get; set; }
-        public string Tag { get; set; }
-        public string Authors { get; set; }
+        public NewsMetadataDto(string body)
+        {
+            HtmlBody = body;
+        }
+
+        private string title;
+        private string url;
+        private string tag;
+        private string authors;
+
+        public string Title { get { return title; } set { title = HttpUtility.HtmlDecode(value); } }
+        public string Url { get { return url; } set { url = HttpUtility.UrlDecode(value); } }
+        public string Tag { get { return tag; } set { tag = HttpUtility.HtmlDecode(value); } }
+        public string Authors { get { return authors; } set { authors = HttpUtility.HtmlDecode(value); } }
         public DateTime PublishedDate { get; set; }
         public string PublishedDateRaw { get; set; }
 
